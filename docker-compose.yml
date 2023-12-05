@@ -1,0 +1,34 @@
+version: '3.8'
+name: tanaduls/php-crud
+services:
+  php-apache-environment:
+    container_name: php-crud
+    build: 
+      context: ./php
+      dockerfile: dockerfile
+    depends_on:
+      - db    
+    volumes:
+      - ./php/src:/var/www/html/
+    ports:
+      - 8081:80
+  db:
+    container_name: db-crud
+    image: mysql
+    restart : always
+    environment:
+      MYSQL_ROOT_PASSWORD: P@ssw0rd
+      MYSQL_USER: MYSQL_USER
+      MYSQL_PASSWORD: MYSQL_PASSWORD
+      MYSQL_DATABASE: MYSQL_DATABASE
+    ports:
+      - 9906:3306
+  phpmyadmin:
+      image: phpmyadmin/phpmyadmin
+      links:
+        - db
+      environment:
+        PMA_HOST: db
+      restart: always
+      ports:
+        - 8082:80
